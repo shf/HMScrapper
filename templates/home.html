@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card border-primary mb-3" style="max-width: 18rem;">
+    <div class="card-body text-primary">
+        <h5 class="card-title">
+            <a href="{% url 'men' %}">Men Shop</a>
+        </h5>
+    </div>
+</div>
+
+<div class="card border-primary mb-3" style="max-width: 18rem;">
+        <div class="card-body text-primary">
+            <h5 class="card-title">
+                <a href="{% url 'women' %}">Women Shop</a>
+            </h5>
+        </div>
+</div>
+
+<div class="card border-primary mb-3" style="max-width: 18rem;">
+        <div class="card-body text-primary">
+            <h5 class="card-title">
+                <a href="{% url 'divided' %}">Divided Shop</a>
+            </h5>
+        </div>
+</div>
+
+
+{% endblock %}
