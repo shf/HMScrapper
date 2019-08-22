@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.env
+venv/
+*.pyc
+media/
+.vscode/
+migrations/
+
+# SQLite database files
+*.sqlite3
