@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Item, Item_men, Item_women, Item_divided
+from .models import Item
 from django.utils import timezone
+from django.db.utils import OperationalError
 
 import logging
 import requests
@@ -54,14 +55,7 @@ class Hedgehog(object):
             else:
                 discount = None
 
-            if self.pk == 0:
-                item = Item_men.objects.create(link=link, category=category, title=title, 
-                    regular_price=regular_price, sale_price = sale_price, discount=discount)
-            elif self.pk == 1:
-                item = Item_women.objects.create(link=link, category=category, title=title, 
-                    regular_price=regular_price, sale_price = sale_price, discount=discount)
-            elif self.pk == 2:
-                item = Item_divided.objects.create(link=link, category=category, title=title, 
+            item = Item.objects.create(link=link, group = self.pk, category=category, title=title, 
                     regular_price=regular_price, sale_price = sale_price, discount=discount)
 
 
@@ -70,39 +64,42 @@ def home(request):
 
 def men(request):
     try:
-        delta = timezone.localtime() - Item_men.objects.all()[1].date
+        items_men = Item.objects.get(group=0)
+        delta = timezone.localtime() - items_men[0].date
         if delta.days > 1:
-            Item_men.objects.all().delete()
+            Item.objects.filter(group=0).delete()
             men_sales = Hedgehog('https://www2.hm.com/en_ca/sale/shopbyproductmen/view-all.html', 0)
             men_sales.crawl()
     except:
         men_sales = Hedgehog('https://www2.hm.com/en_ca/sale/shopbyproductmen/view-all.html', 0)
         men_sales.crawl()
-    items = Item_men.objects.all().order_by('-discount')
+    items = Item.objects.filter(group=0).order_by('-discount')
     return render(request, 'men.html', {'items': items})
 
 def women(request):
     try:
-        delta = timezone.localtime() - Item_women.objects.all()[1].date
+        items_women = Item.objects.filter(group=1)
+        delta = timezone.localtime() - items_women[0].date
         if delta.days > 1:
-            Item_women.objects.all().delete()
+            Item.objects.filter(group=1)().delete()
             women_sales = Hedgehog('https://www2.hm.com/en_ca/sale/shopbyproductladies/view-all.html', 1)
             women_sales.crawl()
     except:
         women_sales = Hedgehog('https://www2.hm.com/en_ca/sale/shopbyproductladies/view-all.html', 1)
         women_sales.crawl()
-    items = Item_women.objects.all().order_by('-discount')
+    items = Item.objects.filter(group=1).order_by('-discount')
     return render(request, 'women.html', {'items': items})
 
 def divided(request):
     try:
-        delta = timezone.localtime() - Item_divided.objects.all()[1].date
+        items_divided = Item.objects.filter(group=2)
+        delta = timezone.localtime() - items_divided[0].date
         if delta.days > 1:
-            Item_divided.objects.all().delete()
+            Item.objects.filter(group=2).delete()
             divided_sales = Hedgehog('https://www2.hm.com/en_ca/sale/shopbyproductdivided/view-all.html', 2)
             divided_sales.crawl()
     except:
         divided_sales = Hedgehog('https://www2.hm.com/en_ca/sale/shopbyproductdivided/view-all.html', 2)
         divided_sales.crawl()
-    items = Item_divided.objects.all().order_by('-discount')
+    items = Item.objects.filter(group=2).order_by('-discount')
     return render(request, 'divided.html', {'items': items})
