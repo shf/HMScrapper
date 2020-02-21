@@ -26,7 +26,7 @@ SECRET_KEY = 'ii!o*gm5i7jvi!)+_pyf00s+t!v-vch(l7x9-pdirq!nap%q!+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['hmscrapper.herokuapp.com']
 
 
 # Application definition
