@@ -65,6 +65,7 @@ def home(request):
 def men(request):
     try:
         items_men = Item.objects.get(group=0)
+        print('here')
         delta = timezone.localtime() - items_men[0].date
         if delta.days > 1:
             Item.objects.filter(group=0).delete()
