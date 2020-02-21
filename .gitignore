@@ -9,3 +9,5 @@ migrations/
 
 # SQLite database files
 *.sqlite3
+
+staticfiles/
