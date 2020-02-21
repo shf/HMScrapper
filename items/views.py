@@ -36,10 +36,14 @@ class Hedgehog(object):
         for product in product_list:
             on_sale = False
             sanity = True
+            
             category = product.find('article', class_='hm-product-item').get('data-category')
             link = product.find('div', class_='image-container').findChildren("a" , recursive=False)[0].get('href')
             title = product.find('div', class_='image-container').findChildren("a" , recursive=False)[0].get('title')
-            prices = product.find('div', class_='item-details').findChildren("strong")[0]
+            try:
+                prices = product.find('div', class_='item-details').findChildren("strong")[0]
+            except:
+                prices = 1.0
             try:
                 regular_price = float(re.findall(r">.*<", str(prices.find('span', class_='price regular')))[0][2:-1])
             except:
