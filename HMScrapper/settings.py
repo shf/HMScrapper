@@ -25,8 +25,6 @@ dotenv_file = os.path.join(BASE_DIR, ".env")
 
 if os.path.isfile(dotenv_file):
     ENV = True
-
-if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
@@ -139,5 +137,5 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 django_heroku.settings(locals())
-if not ENV:
+if ENV:
     del DATABASES['default']['OPTIONS']['sslmode']
