@@ -13,7 +13,7 @@ import datetime
 class Hedgehog(object):
 
     def __init__(self, url, pk):
-        self.headers = { 'user-agent': 'Chrome/56.1.2924.87' }
+        self.headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36', 'referer': 'https://google.com'}
         self.url = url
         self.pk = pk
 
