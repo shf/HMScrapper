@@ -32,9 +32,9 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be used, if set, instead)."
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 if ENV:
-    DEBUG = False
+    DEBUG = True
 
 ALLOWED_HOSTS = ['hmscrapper.herokuapp.com', '127.0.0.1']
 
