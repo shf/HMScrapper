@@ -6,6 +6,9 @@ venv/
 media/
 .vscode/
 migrations/
+*.log
 
 # SQLite database files
 *.sqlite3
+
+staticfiles/

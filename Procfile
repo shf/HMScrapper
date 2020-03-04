@@ -1,0 +1,1 @@
+web: gunicorn HMScrapper.wsgi --log-file -

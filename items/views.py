@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import Item
 from django.utils import timezone
 from django.db.utils import OperationalError
+from django.http import Http404
+
 
 import logging
 import requests
@@ -13,7 +15,7 @@ import datetime
 class Hedgehog(object):
 
     def __init__(self, url, pk):
-        self.headers = { 'user-agent': 'Chrome/56.1.2924.87' }
+        self.headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36', 'referer': 'https://www.google.com'}
         self.url = url
         self.pk = pk
 
@@ -21,6 +23,8 @@ class Hedgehog(object):
         r = requests.get(self.url, headers = self.headers)
 
         status = r.status_code
+        if status == 403:
+            raise Http404("Website refused connection.")
         content = BeautifulSoup(r.content, 'html.parser')
         html = list(content.children)[2]
         num_of_products = html.find_all('h2', class_='load-more-heading')[0].get('data-total')
@@ -43,18 +47,18 @@ class Hedgehog(object):
             try:
                 prices = product.find('div', class_='item-details').findChildren("strong")[0]
             except:
-                prices = 1.0
-            try:
-                regular_price = float(re.findall(r">.*<", str(prices.find('span', class_='price regular')))[0][2:-1])
-            except:
-                regular_price = None
-            try:
-                sale_price = float(re.findall(r">.*<", str(prices.find('span', class_='price sale')))[0][2:-1])
-                on_sale = True
-            except:
-                regular_price = None
                 sanity = False
-            if on_sale and sanity:
+            if sanity:
+                try:
+                    regular_price = float(re.findall(r">.*<", str(prices.find('span', class_='price regular')))[0][2:-1])
+                except:
+                    regular_price = None
+                try:
+                    sale_price = float(re.findall(r">.*<", str(prices.find('span', class_='price sale')))[0][2:-1])
+                    on_sale = True
+                except:
+                    on_sale = False
+            if on_sale:
                 discount = 100*(regular_price - sale_price)/regular_price
             else:
                 discount = None
@@ -69,6 +73,7 @@ def home(request):
 def men(request):
     try:
         items_men = Item.objects.get(group=0)
+        print('here')
         delta = timezone.localtime() - items_men[0].date
         if delta.days > 1:
             Item.objects.filter(group=0).delete()
