@@ -29,6 +29,11 @@ To do that:
 3. Open heroku app with either going [here](https://hmscrapper.herokuapp.com/)
 or `heroku open`
 
+To connect to the remote Heroku Postgres instance:
+
+1. `heroku run bash`
+2. `python manage.py migrate`
+
 To run the app locally using Heroku:
 1. Collect local assets:
 `python manage.py collectstatic`
@@ -37,4 +42,12 @@ To run the app locally using Heroku:
 
 3. Open http://localhost:5000 with your web browser.
 
+
 Tutorial on how to use Postgre on Heroku and sqlite on Django local [here](https://medium.com/@BennettGarner/deploying-django-to-heroku-connecting-heroku-postgres-fcc960d290d1)
+
+Unfortunately Heroku is blocked by H&M and in line 25 in views, where we want to parse information from the html file, response 403 occurs.
+
+Remaining work:
+1. Work on add-user feature to find if something is available in a particular size.
+
+We have seen that using online proxies does not help to deroute the blocking of AWS ips.

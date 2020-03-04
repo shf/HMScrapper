@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import Item
 from django.utils import timezone
 from django.db.utils import OperationalError
+from django.http import Http404
+
 
 import logging
 import requests
@@ -21,6 +23,8 @@ class Hedgehog(object):
         r = requests.get(self.url, headers = self.headers)
 
         status = r.status_code
+        if status == 403:
+            raise Http404("Website refused connection.")
         content = BeautifulSoup(r.content, 'html.parser')
         html = list(content.children)[2]
         num_of_products = html.find_all('h2', class_='load-more-heading')[0].get('data-total')
