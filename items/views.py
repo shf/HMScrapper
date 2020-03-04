@@ -43,18 +43,21 @@ class Hedgehog(object):
             category = product.find('article', class_='hm-product-item').get('data-category')
             link = product.find('div', class_='image-container').findChildren("a" , recursive=False)[0].get('href')
             title = product.find('div', class_='image-container').findChildren("a" , recursive=False)[0].get('title')
-            prices = product.find('div', class_='item-details').findChildren("strong")[0]
             try:
-                regular_price = float(re.findall(r">.*<", str(prices.find('span', class_='price regular')))[0][2:-1])
+                prices = product.find('div', class_='item-details').findChildren("strong")[0]
             except:
-                regular_price = None
-            try:
-                sale_price = float(re.findall(r">.*<", str(prices.find('span', class_='price sale')))[0][2:-1])
-                on_sale = True
-            except:
-                regular_price = None
                 sanity = False
-            if on_sale and sanity:
+            if sanity:
+                try:
+                    regular_price = float(re.findall(r">.*<", str(prices.find('span', class_='price regular')))[0][2:-1])
+                except:
+                    regular_price = None
+                try:
+                    sale_price = float(re.findall(r">.*<", str(prices.find('span', class_='price sale')))[0][2:-1])
+                    on_sale = True
+                except:
+                    on_sale = False
+            if on_sale:
                 discount = 100*(regular_price - sale_price)/regular_price
             else:
                 discount = None
