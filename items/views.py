@@ -40,6 +40,7 @@ class Hedgehog(object):
         for product in product_list:
             on_sale = False
             sanity = True
+            
             category = product.find('article', class_='hm-product-item').get('data-category')
             link = product.find('div', class_='image-container').findChildren("a" , recursive=False)[0].get('href')
             title = product.find('div', class_='image-container').findChildren("a" , recursive=False)[0].get('title')
